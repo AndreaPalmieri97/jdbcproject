@@ -1,7 +1,4 @@
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Scanner;
 
 public class UtenteRepo {
@@ -46,13 +43,33 @@ public class UtenteRepo {
         PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM utente " +
                 "WHERE id = " + id_utente);
         ResultSet resultSet = preparedStatement.executeQuery();
-        resultSet.next();
-        String nome = resultSet.getString("nome");
-        String cognome = resultSet.getString("cognome");
-        String email = resultSet.getString("email");
-        int eta = resultSet.getInt("eta");
+        if (resultSet.next()) {
+            String nome = resultSet.getString("nome");
+            String cognome = resultSet.getString("cognome");
+            String email = resultSet.getString("email");
+            int eta = resultSet.getInt("eta");
 
-        System.out.println("L'utente con ID: " + id_utente + " è il seguente: \n"
-                + nome + "\n" + cognome + "\n" + email + "\n" + eta);
+            System.out.println("L'utente con ID: " + id_utente + " è il seguente: \n"
+                    + nome + "\n" + cognome + "\n" + email + "\n" + eta);
+        }
+        else{
+            System.out.println("Non è presente nessun utente con quell'ID");
+        }
+    }
+
+    public static void deleteUtente() throws SQLException {
+        Connection connection = ConnectionFactory.getConnection();
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Inserisci l'ID dell'utente che vuoi eliminare");
+        int id_utente = scanner.nextInt();
+        PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM utente " +
+                "WHERE id = " + id_utente);
+        int result = preparedStatement.executeUpdate();
+        if(result > 0){
+            System.out.println("Utente eliminato correttamente");
+        }
+        else {
+            System.out.println("Errore nell'eliminazione");
+        }
     }
 }

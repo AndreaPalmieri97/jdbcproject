@@ -6,5 +6,6 @@ public class Main {
 
         //UtenteRepo.generateUtente();
         UtenteRepo.checkUtente();
+        UtenteRepo.deleteUtente();
     }
 }
